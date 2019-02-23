@@ -12,7 +12,7 @@ class UsersContainer extends Component {
     }
 
     newUser() {
-        fetch('https://randomuser.me/api/?results=10')
+        fetch('https://randomuser.me/api/?results=20')
             .then(response => response.json())
             .then(data => {
                 return this.setState({ users: data })
@@ -31,7 +31,7 @@ class UsersContainer extends Component {
                 <div>
                     <h1>My Users List</h1>
                     {this.state.users.results.map((user, index) => (
-                        <div key={index}>{user.name.first}</div>
+                        <div key={index}>{user.name.first} {user.name.last}</div>
 
                     )
                     )}
