@@ -6,36 +6,62 @@ import React, { Component } from 'react';
 class UsersContainer extends Component {
 
     state = {
-        users: {
-            results: []
-        }
+        beers: []
+
     }
 
-    newUser() {
-        fetch('https://randomuser.me/api/?results=20')
-            .then(response => response.json())
+    removeBeers = (beerId) => {
+        const url = `https://beers-bunkier.firebaseapp.com/api/v1/beers/${beerId}`;
+        fetch(url, {
+            method: 'DELETE'
+        })
+            .then(response => {
+                this.newBeers()
+            })
+    }
+
+    handleRemove = (beerId) => {
+        this.removeBeers(beerId);
+      }
+
+    newBeers() {
+        fetch('https://beers-bunkier.firebaseapp.com/api/v1/beers/')
+            .then(response => {
+                return response.json()
+            })
             .then(data => {
-                return this.setState({ users: data })
+                const beersArray = [];
+                Object.entries(data.beers).forEach(elem => {
+                    const newBeer = {
+                        id: elem[0],
+                        ...elem[1]
+                    }
+                    beersArray.push(newBeer);
+                });
+                 this.setState({ beers: beersArray })
             });
-        
-    };
+
+    }
 
     componentDidMount() {
-        this.newUser()
+        this.newBeers()
     }
 
 
     render() {
         return (
             <div>
-                <div>
-                    <h1>My Users List</h1>
-                    {this.state.users.results.map((user, index) => (
-                        <div key={index}>{user.name.first} {user.name.last}</div>
+                
+                    <h1>My Beers List</h1>
+                    {this.state.beers.map(beer => {
+                        return(
+                        <div key={`beer-${beer.id}`}>
+                            {beer.name}
+                            <button onClick={() => this.handleRemove(beer.id)}>Remove</button>
+                        </div>
 
                     )
-                    )}
-                </div>
+                    })}
             </div>
         )
     }

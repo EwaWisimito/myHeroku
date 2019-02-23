@@ -16,7 +16,7 @@ class Form extends Component {
     }
 
     handleSubmit = () => {
-        fetch('https://beers-bunkier.firebaseapp.com/v1/api/beers', {
+        fetch('https://beers-bunkier.firebaseapp.com/api/v1/beers/', {
             method: 'POST',
             body: JSON.stringify(this.state)
         })
