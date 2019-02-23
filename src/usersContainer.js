@@ -3,30 +3,35 @@ import React, { Component } from 'react';
 
 
 
-const users = [
-    {
-        id: 1,
-        name: 'Ann'
-    },
-    {
-        id: 2,
-        name: 'John'
-    },
-    {
-        id: 3,
-        name: 'Mark'
-    }
-]
-
 class UsersContainer extends Component {
+
+    state = {
+        users: {
+            results: []
+        }
+    }
+
+    newUser() {
+        fetch('https://randomuser.me/api/?results=10')
+            .then(response => response.json())
+            .then(data => {
+                return this.setState({ users: data })
+            });
+        
+    };
+
+    componentDidMount() {
+        this.newUser()
+    }
 
 
     render() {
         return (
             <div>
                 <div>
-                    {users.map((user, index) => (
-                        <div key={index}>{user.name}</div>
+                    <h1>My Users List</h1>
+                    {this.state.users.results.map((user, index) => (
+                        <div key={index}>{user.name.first}</div>
 
                     )
                     )}
